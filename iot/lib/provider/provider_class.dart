@@ -41,17 +41,6 @@ class DeviceSelectionController extends ChangeNotifier {
     notifyListeners();
   }
 
-// here is the loading
-
-  // void loading() async {
-  //   try {
-  //     await Future.delayed(Duration(seconds: 2));
-  //   } finally {
-  //     loadingValue = true;
-  //     notifyListeners();
-  //   }
-  // }
-
   late Timer timer;
   static const int interval = 5; // in seconds
 
@@ -83,8 +72,6 @@ class DeviceSelectionController extends ChangeNotifier {
       },
     );
 
-    loadingValue = true;
-
     notifyListeners();
   }
 
@@ -98,13 +85,13 @@ class DeviceSelectionController extends ChangeNotifier {
   }
 
 //store the data for home screen name
-  String getname = '';
+  String? getname;
   getNamestring() async {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     getname = pref.getString('name')!;
     print(getname);
-    loadingValue = true;
+
     notifyListeners();
   }
 
@@ -130,5 +117,21 @@ class DeviceSelectionController extends ChangeNotifier {
     bills = amount! * 7;
     bills.toStringAsFixed(3);
     bill = bills;
+  }
+
+  // here is the loading
+
+  void loading() async {
+    await Future.delayed(Duration(seconds: 3));
+
+    loadingValue = !loadingValue;
+    getNamestring();
+    notifyListeners();
+  }
+
+  int indexvalue = 0;
+  void countter() {
+    indexvalue = indexvalue + 1;
+    notifyListeners();
   }
 }

@@ -1,15 +1,33 @@
 import 'package:electricity_app/core/constant/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class BillScreen extends StatelessWidget {
-  const BillScreen({super.key});
+  const BillScreen(
+      {super.key,
+      required this.unit,
+      required this.amount,
+      required this.date,
+      required this.time});
+
+  final String unit;
+  final String amount;
+  final String date;
+  final String time;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorConstant.iotBackground,
       appBar: AppBar(
+        leading: InkWell(
+          onTap: () {
+            Navigator.pop(context);
+          },
+          child: Icon(
+            Icons.arrow_back_ios_new_sharp,
+            color: ColorConstant.iotWhite,
+          ),
+        ),
         backgroundColor: ColorConstant.iotBackground,
         centerTitle: true,
         title: Text(
@@ -57,7 +75,7 @@ class BillScreen extends StatelessWidget {
                       Expanded(
                         child: Center(
                           child: Text(
-                            "200",
+                            unit,
                             style: TextStyle(
                                 color: ColorConstant.iotWhite, fontSize: 18),
                           ),
@@ -66,7 +84,7 @@ class BillScreen extends StatelessWidget {
                       Expanded(
                         child: Center(
                           child: Text(
-                            "385",
+                            amount,
                             style: TextStyle(
                                 color: ColorConstant.iotWhite, fontSize: 18),
                           ),
@@ -88,13 +106,12 @@ class BillScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                              date,
                               style: TextStyle(color: ColorConstant.iotWhite),
                             ),
                             SizedBox(width: 15),
                             Text(
-                              DateFormat.jm().format(DateTime
-                                  .now()), // Formats time in hours:minutes AM/PM format
+                              time, // Formats time in hours:minutes AM/PM format
                               style: TextStyle(color: ColorConstant.iotWhite),
                             ),
                           ],

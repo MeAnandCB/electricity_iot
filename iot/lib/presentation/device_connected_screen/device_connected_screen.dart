@@ -15,7 +15,10 @@ class _DeviceSelectionScreenState extends State<DeviceSelectionScreen> {
     return Scaffold(
       backgroundColor: ColorConstant.iotBackground,
       appBar: AppBar(
-        title: Text('Select Devices'),
+        title: Text(
+          'Select Devices',
+          style: TextStyle(color: ColorConstant.iotWhite),
+        ),
         backgroundColor: ColorConstant.iotBackground,
       ),
       body: GridView.builder(

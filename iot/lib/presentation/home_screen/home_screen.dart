@@ -19,15 +19,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-//################################################################################
-//################################################################################
-
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      Provider.of<DeviceSelectionController>(context, listen: false)
+      Provider.of<DeviceSelectionController>(context, listen: false).loading();
+      await Provider.of<DeviceSelectionController>(context, listen: false)
           .startCalculating();
-      getstring();
     });
 
     super.initState();
@@ -37,14 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void countter() {
     indexvalue = indexvalue + 1;
     setState(() {});
-  }
-
-  String getname = '';
-  getstring() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
-    getname = pref.getString('name')!;
-    print(getname);
   }
 
   @override
@@ -58,13 +47,20 @@ class _HomeScreenState extends State<HomeScreen> {
             Center(
               child: Column(
                 children: [
-                  Text(
-                    "Hi ${getname} ",
-                    style: TextStyle(
-                        color: ColorConstant.iotWhite,
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  provider.loadingValue == false
+                      ? SizedBox(
+                          height: 20,
+                          width: 20,
+                          child: CircularProgressIndicator(
+                            color: ColorConstant.iotLiteorange,
+                          ))
+                      : Text(
+                          "Hi ${provider.getname} ",
+                          style: TextStyle(
+                              color: ColorConstant.iotWhite,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold),
+                        ),
                   Text(
                     "Welcome to your home.",
                     style: TextStyle(
@@ -90,22 +86,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   // child: Image.asset("assets/fan.png"),
                 ),
-                // bottomnavBarScreenProvider.loadingValue == false
-                //     ? SizedBox(
-                //         height: 20,
-                //         width: 20,
-                //         child: CircularProgressIndicator(
-                //           color: ColorConstant.iotLiteorange,
-                //         ))
-                //     :
-
-                Text(
-                  "Device Connected",
-                  style: TextStyle(
-                    color: ColorConstant.iotWhite.withOpacity(.5),
-                    fontSize: 18,
-                  ),
-                ),
+                provider.loadingValue == false
+                    ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          color: ColorConstant.iotLiteorange,
+                        ))
+                    : Text(
+                        "Device Connected",
+                        style: TextStyle(
+                          color: ColorConstant.iotWhite.withOpacity(.5),
+                          fontSize: 18,
+                        ),
+                      ),
               ],
             ),
             SizedBox(height: 20),
@@ -166,7 +160,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => BillScreen(),
+                    builder: (context) => BillScreen(
+                      unit: provider.unitFinal.toString(),
+                      amount: provider.bill.toString(),
+                      date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                      time: DateFormat.jm().format(DateTime.now()),
+                    ),
                   ),
                 );
               },
