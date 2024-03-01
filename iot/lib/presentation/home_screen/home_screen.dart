@@ -1,10 +1,13 @@
+import 'package:electricity_app/core/constant/boxes.dart';
 import 'package:electricity_app/core/constant/colors.dart';
+import 'package:electricity_app/core/database/current_data.dart';
 import 'package:electricity_app/presentation/bill_screen/bill_screen.dart';
 import 'package:electricity_app/presentation/home_screen/widgets/custom_reading_card.dart';
 import 'package:electricity_app/provider/provider_class.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -24,9 +27,24 @@ class _HomeScreenState extends State<HomeScreen> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Provider.of<DeviceSelectionController>(context, listen: false)
           .startCalculating();
+      getstring();
     });
 
     super.initState();
+  }
+
+  int indexvalue = 0;
+  void countter() {
+    indexvalue = indexvalue + 1;
+    setState(() {});
+  }
+
+  String getname = '';
+  getstring() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+
+    getname = pref.getString('name')!;
+    print(getname);
   }
 
   @override
@@ -41,7 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 children: [
                   Text(
-                    "Hi ",
+                    "Hi ${getname} ",
                     style: TextStyle(
                         color: ColorConstant.iotWhite,
                         fontSize: 28,
@@ -131,8 +149,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             InkWell(
               onTap: () {
-                Provider.of<DeviceSelectionController>(context, listen: false)
-                    .storeConsumedUnits(provider.unitFinal);
+                countter();
+                setState(() {
+                  currentDataBox.put(
+                      "name${indexvalue}",
+                      CurrentData(
+                        current: provider.unitFinal,
+                        bill_amount: provider.bill.toInt(),
+                        date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+                        time: DateFormat.jm().format(DateTime.now()),
+                      ));
+
+                  print(currentDataBox.length);
+                });
 
                 Navigator.push(
                   context,
@@ -145,7 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: EdgeInsets.symmetric(vertical: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
-                  color: ColorConstant.iotLiteorange,
+                  color: ColorConstant.iotLiteGreen,
                 ),
                 child: Center(
                   child: Text("Get Bill"),
@@ -164,8 +193,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Last Updated : ",
-                    style: TextStyle(color: ColorConstant.iotWhite),
+                    "Date & time : ",
+                    style: TextStyle(color: ColorConstant.iotLiteGreen),
                   ),
                   SizedBox(width: 10),
                   Text(

@@ -1,4 +1,6 @@
+import 'package:electricity_app/core/constant/boxes.dart';
 import 'package:electricity_app/core/constant/colors.dart';
+import 'package:electricity_app/core/database/current_data.dart';
 import 'package:electricity_app/provider/provider_class.dart';
 import 'package:flutter/material.dart';
 
@@ -16,12 +18,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
-      Provider.of<DeviceSelectionController>(context, listen: false);
+      Provider.of<DeviceSelectionController>(context, listen: false)
+          .billAmount();
     });
 
     super.initState();
   }
 
+// Total Bill = Units Consumed × Rate per Unit
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DeviceSelectionController>(context);
@@ -36,108 +40,116 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
         ),
         body: ListView.separated(
-            itemBuilder: (context, index) => Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: double.infinity,
-                        padding: EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: ColorConstant.iotGrey)),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Row(
-                                  children: [
-                                    Center(
-                                      child: Text(
-                                        "Unit Cunsumed : ",
-                                        style: TextStyle(
-                                            color: ColorConstant.iotLiteGreen),
-                                      ),
+            itemBuilder: (context, index) {
+              CurrentData data = currentDataBox.getAt(index);
+
+              return Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: ColorConstant.iotGrey)),
+                      child: Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      "Unit Cunsumed : ",
+                                      style: TextStyle(
+                                          color: ColorConstant.iotLiteGreen),
                                     ),
-                                    Center(
-                                      child: Text(
-                                        provider.consumedUnitsList[index]
-                                            .toString(),
-                                        style: TextStyle(
-                                            color: ColorConstant.iotWhite,
-                                            fontSize: 18),
-                                      ),
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      data.current.toStringAsFixed(2),
+                                      style: TextStyle(
+                                          color: ColorConstant.iotWhite,
+                                          fontSize: 18),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    currentDataBox.deleteAt(index);
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.delete_outline,
+                                  color: ColorConstant.iotRed,
+                                ),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Center(
+                                child: Text(
+                                  "Total Bill Amount  :   ",
+                                  style: TextStyle(
+                                      color: ColorConstant.iotLiteGreen),
+                                ),
+                              ),
+                              Center(
+                                child: Text(
+                                  provider.bill.toStringAsFixed(2),
+                                  style: TextStyle(
+                                      color: ColorConstant.iotWhite,
+                                      fontSize: 18),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10),
+                                width: MediaQuery.sizeOf(context).width / 2,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color: ColorConstant.iotGrey)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      data.date,
+                                      style: TextStyle(
+                                          color: ColorConstant.iotWhite),
+                                    ),
+                                    SizedBox(width: 15),
+                                    Text(
+                                      data.time, // Formats time in hours:minutes AM/PM format
+                                      style: TextStyle(
+                                          color: ColorConstant.iotWhite),
                                     ),
                                   ],
                                 ),
-                                Icon(
-                                  Icons.delete_outline,
-                                  color: ColorConstant.iotRed,
-                                )
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Center(
-                                  child: Text(
-                                    "Total Bill Amount  :   ",
-                                    style: TextStyle(
-                                        color: ColorConstant.iotLiteGreen),
-                                  ),
-                                ),
-                                Center(
-                                  child: Text(
-                                    "385",
-                                    style: TextStyle(
-                                        color: ColorConstant.iotWhite,
-                                        fontSize: 18),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(10),
-                                  width: MediaQuery.sizeOf(context).width / 2,
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(
-                                          color: ColorConstant.iotGrey)),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        DateFormat('yyyy-MM-dd')
-                                            .format(DateTime.now()),
-                                        style: TextStyle(
-                                            color: ColorConstant.iotWhite),
-                                      ),
-                                      SizedBox(width: 15),
-                                      Text(
-                                        DateFormat.jm().format(DateTime
-                                            .now()), // Formats time in hours:minutes AM/PM format
-                                        style: TextStyle(
-                                            color: ColorConstant.iotWhite),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
+                              ),
+                            ],
+                          )
+                        ],
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
+              );
+            },
             separatorBuilder: (context, index) => Divider(),
-            itemCount: provider.consumedUnitsList.length));
+            itemCount: currentDataBox.length));
   }
 }

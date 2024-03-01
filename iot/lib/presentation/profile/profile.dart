@@ -1,3 +1,4 @@
+import 'package:electricity_app/core/constant/boxes.dart';
 import 'package:electricity_app/core/constant/colors.dart';
 import 'package:electricity_app/presentation/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ class ProfileScreen extends StatelessWidget {
     SharedPreferences pref = await SharedPreferences.getInstance();
 
     pref.clear();
+    currentDataBox.clear();
   }
 
   @override

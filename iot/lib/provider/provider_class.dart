@@ -10,7 +10,7 @@ class DeviceSelectionController extends ChangeNotifier {
   bool loadingValue = false;
   double totalPower = 0.0;
   double unitFinal = 0.0;
-
+  double bill = 0.0;
   Map<String, bool> deviceSelection = {
     'Fan': false,
     'Bulb': false,
@@ -122,5 +122,13 @@ class DeviceSelectionController extends ChangeNotifier {
 
     print(
         '######################## Total power consumption: $totalPower Watts');
+  }
+
+  billAmount({double? amount}) {
+    double bills;
+
+    bills = amount! * 7;
+    bills.toStringAsFixed(3);
+    bill = bills;
   }
 }
