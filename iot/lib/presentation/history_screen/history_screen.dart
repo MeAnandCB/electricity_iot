@@ -40,6 +40,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
         ),
         body: ListView.separated(
             reverse: true,
+            shrinkWrap: true,
             itemBuilder: (context, index) {
               CurrentData data = currentDataBox.getAt(index);
 
