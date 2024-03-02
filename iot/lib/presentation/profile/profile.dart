@@ -19,13 +19,37 @@ class ProfileScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 100),
       child: InkWell(
         onTap: () {
-          logout();
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(
-                builder: (context) => LoginScreen(),
-              ),
-              (route) => false);
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Confirmation'),
+                content: Text(
+                    'If you LogOut, The HISTORY data will be CLEARED. Do you want to Logout?'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      logout();
+                      Navigator.pop(context);
+                    },
+                    child: Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      logout();
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                          (route) => false); // Yes, exit
+                    },
+                    child: Text('Yes'),
+                  ),
+                ],
+              );
+            },
+          );
         },
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

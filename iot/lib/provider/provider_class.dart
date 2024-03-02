@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'dart:math';
 
@@ -100,10 +99,10 @@ class DeviceSelectionController extends ChangeNotifier {
     print('Total power consumption: $totalPower Watts');
   }
 
+// here we calculating the total bill amount
   billAmount({double amount = 0}) {
     bills = (amount * 7);
 
-    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& $bills");
     notifyListeners();
   }
 
