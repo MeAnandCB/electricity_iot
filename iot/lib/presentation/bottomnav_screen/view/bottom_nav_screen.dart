@@ -25,41 +25,70 @@ class _BottomNavScreenState extends State<BottomNavScreen> {
       HistoryScreen(),
       ProfileScreen()
     ];
-    return Scaffold(
-      body: Screens[selectedIndex],
-      backgroundColor: ColorConstant.iotBackground,
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: (value) {
-            selectedIndex = value;
-            setState(() {});
+    return WillPopScope(
+      onWillPop: () async {
+        bool exit = await showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Confirmation'),
+              content: Text(
+                  'Do you want to exit? The powered appliances will be turned off.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false); // No, do not exit
+                  },
+                  child: Text('No'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true); // Yes, exit
+                  },
+                  child: Text('Yes'),
+                ),
+              ],
+            );
           },
-          selectedItemColor: ColorConstant.iotLiteGreen,
-          unselectedItemColor: ColorConstant.iotWhite,
-          backgroundColor: ColorConstant.iotGrey,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.home,
-                ),
-                label: "Home"),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.devices_other_outlined,
-                ),
-                label: "Device"),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.history,
-                ),
-                label: "History"),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  Icons.settings,
-                ),
-                label: "Setting"),
-          ]),
+        );
+        return exit ?? false; // If exit is null, default to false (don't exit)
+      },
+      child: Scaffold(
+        body: Screens[selectedIndex],
+        backgroundColor: ColorConstant.iotBackground,
+        bottomNavigationBar: BottomNavigationBar(
+            currentIndex: selectedIndex,
+            onTap: (value) {
+              selectedIndex = value;
+              setState(() {});
+            },
+            selectedItemColor: ColorConstant.iotLiteGreen,
+            unselectedItemColor: ColorConstant.iotWhite,
+            backgroundColor: ColorConstant.iotGrey,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.home,
+                  ),
+                  label: "Home"),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.devices_other_outlined,
+                  ),
+                  label: "Device"),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.history,
+                  ),
+                  label: "History"),
+              BottomNavigationBarItem(
+                  icon: Icon(
+                    Icons.settings,
+                  ),
+                  label: "Setting"),
+            ]),
+      ),
     );
   }
 }

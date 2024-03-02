@@ -13,7 +13,7 @@ class CurrentData {
   double current;
 
   @HiveField(1)
-  int bill_amount;
+  double bill_amount;
 
   @HiveField(2)
   String date;

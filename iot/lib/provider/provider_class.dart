@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -9,8 +10,10 @@ class DeviceSelectionController extends ChangeNotifier {
   late Box<double> consumedUnitsBox;
   bool loadingValue = false;
   double totalPower = 0.0;
+
   double unitFinal = 0.0;
-  double bill = 0.0;
+  double? bills;
+
   Map<String, bool> deviceSelection = {
     'Fan': false,
     'Bulb': false,
@@ -22,24 +25,6 @@ class DeviceSelectionController extends ChangeNotifier {
     'Bulb': 60, // Assuming bulb consumes 60W
     'TV': 150, // Assuming TV consumes 150W
   };
-
-  List<double> consumedUnitsList = []; // List to store consumed units
-
-  Future<void> _openConsumedUnitsBox() async {
-    await Hive.openBox<double>('consumed_units');
-    consumedUnitsBox = await Hive.openBox<double>('consumed_units');
-  }
-
-  void closeBoxes() {
-    consumedUnitsBox.close();
-  }
-
-  void storeConsumedUnits(double units) {
-    consumedUnitsList.add(units); // Add new units to the list
-    //consumedUnitsBox.add(units); // Store units in Hive box
-    print("Stored units: $units");
-    notifyListeners();
-  }
 
   late Timer timer;
   static const int interval = 5; // in seconds
@@ -53,15 +38,17 @@ class DeviceSelectionController extends ChangeNotifier {
 
   startCalculating() {
     Future.delayed(Duration(seconds: 5)).then(
-      (value) {
+      (value) async {
         print(totalPower);
         double voltage = generateRandomVoltage();
+
         double resistance = 100; // Sample resistance value in ohms
         double amperage = voltage / resistance;
         double power = totalPower + (voltage * amperage);
         double time = interval / 3600; // converting seconds to hours
         double energy = power * time;
         unitFinal = energy;
+
         current = [
           {"title": "Voltage (V)", "ele": voltage.toStringAsFixed(2)},
           {"title": "Amperage (A)", "ele": amperage.toStringAsFixed(2)},
@@ -96,27 +83,24 @@ class DeviceSelectionController extends ChangeNotifier {
   }
 
   // calculationg the total
-
   void calculateTotalPower() {
     deviceSelection.forEach((d, isSelected) {
       if (isSelected) {
         totalPower += devicePower[0] ?? 0.0;
       } else {
-        totalPower += 0.0;
+        totalPower += 0;
       }
       notifyListeners();
     });
 
-    print(
-        '######################## Total power consumption: $totalPower Watts');
+    print('Total power consumption: $totalPower Watts');
   }
 
-  billAmount({double? amount}) {
-    double bills;
+  billAmount({double amount = 0}) {
+    bills = (amount * 7);
 
-    bills = amount! * 7;
-    bills.toStringAsFixed(3);
-    bill = bills;
+    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&& $bills");
+    notifyListeners();
   }
 
   // here is the loading
@@ -125,7 +109,7 @@ class DeviceSelectionController extends ChangeNotifier {
     await Future.delayed(Duration(seconds: 3));
 
     loadingValue = !loadingValue;
-    getNamestring();
+
     notifyListeners();
   }
 

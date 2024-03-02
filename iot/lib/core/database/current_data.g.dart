@@ -18,7 +18,7 @@ class CurrentDataAdapter extends TypeAdapter<CurrentData> {
     };
     return CurrentData(
       current: fields[0] as double,
-      bill_amount: fields[1] as int,
+      bill_amount: fields[1] as double,
       date: fields[2] as String,
       time: fields[3] as String,
     );

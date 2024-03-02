@@ -19,7 +19,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Provider.of<DeviceSelectionController>(context, listen: false)
-          .billAmount();
+          .calculateTotalPower();
     });
 
     super.initState();
@@ -40,8 +40,11 @@ class _HistoryScreenState extends State<HistoryScreen> {
           ),
         ),
         body: ListView.separated(
+            reverse: true,
             itemBuilder: (context, index) {
               CurrentData data = currentDataBox.getAt(index);
+
+              print(data.bill_amount);
 
               return Padding(
                 padding:
@@ -104,7 +107,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                               ),
                               Center(
                                 child: Text(
-                                  provider.bill.toStringAsFixed(2),
+                                  data.bill_amount.toStringAsFixed(2),
                                   style: TextStyle(
                                       color: ColorConstant.iotWhite,
                                       fontSize: 18),

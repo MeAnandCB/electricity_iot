@@ -14,7 +14,7 @@ void main() async {
   // Initialize Hive and open Hive box
   await Hive.initFlutter();
   Hive.registerAdapter(CurrentDataAdapter());
-  currentDataBox = await Hive.openBox<CurrentData>('userBox');
+  currentDataBox = await Hive.openBox<CurrentData>('current_box');
   // Run the Flutter application
   runApp(MyApp());
 }

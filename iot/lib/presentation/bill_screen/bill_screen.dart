@@ -9,8 +9,8 @@ class BillScreen extends StatelessWidget {
       required this.date,
       required this.time});
 
-  final String unit;
-  final String amount;
+  final double unit;
+  final double amount;
   final String date;
   final String time;
 
@@ -75,7 +75,7 @@ class BillScreen extends StatelessWidget {
                       Expanded(
                         child: Center(
                           child: Text(
-                            unit,
+                            unit.toStringAsFixed(3),
                             style: TextStyle(
                                 color: ColorConstant.iotWhite, fontSize: 18),
                           ),
@@ -84,7 +84,7 @@ class BillScreen extends StatelessWidget {
                       Expanded(
                         child: Center(
                           child: Text(
-                            amount,
+                            "${(unit * 7).toStringAsFixed(3)}",
                             style: TextStyle(
                                 color: ColorConstant.iotWhite, fontSize: 18),
                           ),
