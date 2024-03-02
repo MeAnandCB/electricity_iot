@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:electricity_app/core/constant/colors.dart';
+import 'package:electricity_app/internet_screen.dart';
 import 'package:electricity_app/presentation/bottomnav_screen/view/bottom_nav_screen.dart';
 import 'package:electricity_app/presentation/home_screen/home_screen.dart';
 import 'package:electricity_app/presentation/login_screen/login_screen.dart';
@@ -29,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => BottomNavScreen(),
+              builder: (context) => InternetScreen(),
             ));
       }
     });

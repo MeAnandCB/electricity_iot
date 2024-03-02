@@ -16,6 +16,7 @@ class BottomNavScreen extends StatefulWidget {
 
 class _BottomNavScreenState extends State<BottomNavScreen> {
   int selectedIndex = 0;
+  bool ischecker = true;
 
   @override
   Widget build(BuildContext context) {

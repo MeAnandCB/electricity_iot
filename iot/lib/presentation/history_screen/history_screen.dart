@@ -28,7 +28,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
 // Total Bill = Units Consumed × Rate per Unit
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<DeviceSelectionController>(context);
     return Scaffold(
         backgroundColor: ColorConstant.iotBackground,
         appBar: AppBar(

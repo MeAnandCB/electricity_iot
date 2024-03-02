@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'dart:math';
 
@@ -10,6 +11,7 @@ class DeviceSelectionController extends ChangeNotifier {
   late Box<double> consumedUnitsBox;
   bool loadingValue = false;
   double totalPower = 0.0;
+  double temp = 0.0;
 
   double unitFinal = 0.0;
   double? bills;
@@ -37,7 +39,7 @@ class DeviceSelectionController extends ChangeNotifier {
   ];
 
   startCalculating() {
-    Future.delayed(Duration(seconds: 5)).then(
+    Future.delayed(Duration(seconds: interval)).then(
       (value) async {
         print(totalPower);
         double voltage = generateRandomVoltage();
@@ -49,10 +51,12 @@ class DeviceSelectionController extends ChangeNotifier {
         double energy = power * time;
         unitFinal = energy;
 
+        temp = temp + energy;
+
         current = [
           {"title": "Voltage (V)", "ele": voltage.toStringAsFixed(2)},
           {"title": "Amperage (A)", "ele": amperage.toStringAsFixed(2)},
-          {"title": "Consumed Energy (kWh)", "ele": energy.toStringAsFixed(2)},
+          {"title": "Consumed Energy (kWh)", "ele": temp.toStringAsFixed(2)},
           {"title": "Power (W)", "ele": power.toStringAsFixed(2)},
         ];
         startCalculating();
@@ -116,6 +120,14 @@ class DeviceSelectionController extends ChangeNotifier {
   int indexvalue = 0;
   void countter() {
     indexvalue = indexvalue + 1;
+    notifyListeners();
+  }
+
+  bool? checker;
+
+  // here is the functio for checking the internet connection
+  connectionChecker(bool connected) {
+    checker = connected;
     notifyListeners();
   }
 }

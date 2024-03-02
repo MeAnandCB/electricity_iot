@@ -41,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   .unitFinal,
           bill_amount:
               (Provider.of<DeviceSelectionController>(context, listen: false)
-                      .unitFinal *
+                      .temp *
                   7),
           date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
           time: DateFormat.jm().format(DateTime.now()),
@@ -150,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => BillScreen(
-                        unit: provider.unitFinal,
+                        unit: provider.temp,
                         amount: provider.bills ?? 0,
                         date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
                         time: DateFormat.jm().format(DateTime.now()),

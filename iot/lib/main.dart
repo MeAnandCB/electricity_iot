@@ -1,5 +1,6 @@
 import 'package:electricity_app/core/constant/boxes.dart';
 import 'package:electricity_app/core/database/current_data.dart';
+import 'package:electricity_app/internet_screen.dart';
 import 'package:electricity_app/provider/provider_class.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -26,10 +27,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => DeviceSelectionController(),
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: SplashScreen(),
-      ),
+      child:
+          MaterialApp(debugShowCheckedModeBanner: false, home: SplashScreen()),
     );
   }
 }
