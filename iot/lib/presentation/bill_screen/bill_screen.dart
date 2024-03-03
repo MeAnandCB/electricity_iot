@@ -1,7 +1,11 @@
+import 'package:electricity_app/core/constant/boxes.dart';
 import 'package:electricity_app/core/constant/colors.dart';
+import 'package:electricity_app/core/database/current_data.dart';
+import 'package:electricity_app/provider/provider_class.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class BillScreen extends StatelessWidget {
+class BillScreen extends StatefulWidget {
   const BillScreen(
       {super.key,
       required this.unit,
@@ -13,6 +17,23 @@ class BillScreen extends StatelessWidget {
   final double amount;
   final String date;
   final String time;
+
+  @override
+  State<BillScreen> createState() => _BillScreenState();
+}
+
+class _BillScreenState extends State<BillScreen> {
+  adddatatoDb() async {
+    setState(() async {
+      await currentDataBox.put(
+          "name${widget.unit}",
+          CurrentData(
+              current: widget.unit,
+              bill_amount: (widget.unit * 7),
+              date: widget.date,
+              time: widget.time));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +96,7 @@ class BillScreen extends StatelessWidget {
                       Expanded(
                         child: Center(
                           child: Text(
-                            unit.toStringAsFixed(3),
+                            widget.unit.toStringAsFixed(3),
                             style: TextStyle(
                                 color: ColorConstant.iotWhite, fontSize: 18),
                           ),
@@ -84,7 +105,7 @@ class BillScreen extends StatelessWidget {
                       Expanded(
                         child: Center(
                           child: Text(
-                            "${(unit * 7).toStringAsFixed(3)}",
+                            "${(widget.unit * 7).toStringAsFixed(3)}",
                             style: TextStyle(
                                 color: ColorConstant.iotWhite, fontSize: 18),
                           ),
@@ -106,12 +127,13 @@ class BillScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              date,
+                              widget.date,
                               style: TextStyle(color: ColorConstant.iotWhite),
                             ),
                             SizedBox(width: 15),
                             Text(
-                              time, // Formats time in hours:minutes AM/PM format
+                              widget
+                                  .time, // Formats time in hours:minutes AM/PM format
                               style: TextStyle(color: ColorConstant.iotWhite),
                             ),
                           ],
@@ -123,6 +145,23 @@ class BillScreen extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+      bottomNavigationBar: InkWell(
+        onTap: () {
+          adddatatoDb();
+          Navigator.pop(context);
+        },
+        child: Container(
+          height: 60,
+          padding: EdgeInsets.symmetric(vertical: 20),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(15),
+            color: ColorConstant.iotLiteGreen,
+          ),
+          child: Center(
+            child: Text("Save the Response"),
+          ),
         ),
       ),
     );

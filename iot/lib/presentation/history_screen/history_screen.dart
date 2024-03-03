@@ -85,6 +85,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 onTap: () {
                                   setState(() {
                                     currentDataBox.deleteAt(index);
+                                    data;
                                   });
                                 },
                                 child: Icon(

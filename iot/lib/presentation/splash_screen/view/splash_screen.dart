@@ -55,10 +55,10 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Image.asset("assets/logo.png"),
             Text(
-              "Track Your Power",
+              "ECMS",
               style: TextStyle(
                   color: ColorConstant.iotLiteorange,
-                  fontSize: 28,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold),
             ),
             Text(

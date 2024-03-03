@@ -32,24 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  void adddatatoDb() async {
-    await currentDataBox.put(
-        "name${Provider.of<DeviceSelectionController>(context, listen: false).unitFinal}",
-        CurrentData(
-          current:
-              Provider.of<DeviceSelectionController>(context, listen: false)
-                  .unitFinal,
-          bill_amount:
-              (Provider.of<DeviceSelectionController>(context, listen: false)
-                      .temp *
-                  7),
-          date: DateFormat('yyyy-MM-dd').format(DateTime.now()),
-          time: DateFormat.jm().format(DateTime.now()),
-        ));
-
-    setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DeviceSelectionController>(context);
@@ -145,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
             InkWell(
               onTap: () {
                 if (provider.unitFinal > 0.0) {
-                  adddatatoDb();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
